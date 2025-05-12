@@ -41,7 +41,7 @@ on:
           - oneplus_pad2_v
           - oneplus_13
           - oneplus_ace5_pro
-          - GitHub有bug可能不显示最后一项,误使用此项
+          - GitHub有bug可能不显示最后一项,勿使用此项
       CPUD:
         type: choice
         description: "处理器代号"
