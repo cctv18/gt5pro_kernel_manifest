@@ -2,8 +2,8 @@ name: 编译真我GT5 Pro内核
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 23 * * *'  # UTC时间23点（北京时间次日7点）
+#  schedule:
+#    - cron: '0 23 * * *'  # UTC时间23点（北京时间次日7点）
 
 env:
   RETENTION_COUNT: 7  # 保留的发布版本数量
@@ -54,7 +54,7 @@ jobs:
       - name: 初始化版本库并同步
         run: |
           mkdir kernel_workspace && cd kernel_workspace
-          repo init -u https://github.com/cctv18/gt5pro_kernel_manifest.git -b realme/${{ env.CPU }} -m ${{ env.FEIL }}_v.xml --depth=1
+          repo init -u https://github.com/ferstar/kernel_manifest.git -b realme/${{ env.CPU }} -m ${{ env.FEIL }}_v.xml --depth=1
           repo sync -c -j$(nproc --all) --no-tags --fail-fast
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
           rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
