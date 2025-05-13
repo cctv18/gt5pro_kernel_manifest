@@ -58,8 +58,8 @@ jobs:
 
       - name: Config and dependencies
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "ychenxuan"
+          git config --global user.email "2785422781@qq.com"
           echo "KVER=v$(date +%Y%m%d)" >> $GITHUB_ENV
           sudo apt update
           sudo apt install -y python3 git curl
