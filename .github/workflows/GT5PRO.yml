@@ -54,7 +54,7 @@ jobs:
       - name: 初始化版本库并同步
         run: |
           mkdir kernel_workspace && cd kernel_workspace
-          repo init -u https://github.com/cctv18/gt5pro_kernel_manifest.git -b realme/${{ env.CPU }} -m ${{ env.FEIL }}.xml --depth=1
+          repo init -u https://github.com/ferstar/kernel_manifest.git -b realme/${{ env.CPU }} -m ${{ env.FEIL }}.xml --depth=1
           repo sync -c -j$(nproc --all) --no-tags --fail-fast
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
           rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
@@ -162,6 +162,12 @@ jobs:
 
           sed -i 's/check_defconfig//' ./common/build.config.gki
 
+      - name: 添加制作名称
+        run: |
+          cd kernel_workspace/kernel_platform
+          sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
+          sed -i 's|echo "\$res"|echo "'"$(echo "${{ env.KERNEL_NAME }}" | sed 's/[\&/]/\\&/g')"'"|g' ./common/scripts/setlocalversion
+           
       - name: 构建内核
         run: |
           cd kernel_workspace
