@@ -114,7 +114,43 @@ jobs:
           #  patch -p1 -F 3 < lz4kd.patch || true
           #fi
 
+      - name: 应用android_kabi补丁
+        run: |
+          cd kernel_workspace/kernel_platform/common
+          output_file="kabi.patch"
+          cat << 'EOF' > "$output_file"
+          --- a/include/linux/android_kabi.h
+          +++ b/include/linux/android_kabi.h
+          @@ -33,6 +33,7 @@
+           #define _ANDROID_KABI_H
+ 
+           #include <linux/compiler.h>
+          +#include <linux/stringify.h>
+ 
+           /*
+            * Worker macros, don't use these, use the ones without a leading '_'
+          EOF
 
+          chmod 777 "$output_file"
+          patch -p1 < kabi.patch
+          cd ../msm-kernel
+          output_file="kabi.patch"
+          cat << 'EOF' > "$output_file"
+          --- a/include/linux/android_kabi.h
+          +++ b/include/linux/android_kabi.h
+          @@ -33,6 +33,7 @@
+           #define _ANDROID_KABI_H
+ 
+           #include <linux/compiler.h>
+          +#include <linux/stringify.h>
+ 
+           /*
+            * Worker macros, don't use these, use the ones without a leading '_'
+          EOF
+
+          chmod 777 "$output_file"
+          patch -p1 < kabi.patch
+          
       - name: 添加 SUSFS 配置设置
         run: |
           cd kernel_workspace/kernel_platform
@@ -165,7 +201,7 @@ jobs:
       - name: 添加制作名称
         run: |
           cd kernel_workspace/kernel_platform
-          #sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
+          sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
           sed -i 's|echo "\$res"|echo "'"$(echo "${{ env.KERNEL_NAME }}" | sed 's/[\&/]/\\&/g')"'"|g' ./common/scripts/setlocalversion
            
       - name: 构建内核
